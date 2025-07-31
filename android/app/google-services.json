@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "33465475014",
+    "project_id": "habitree-563a5",
+    "storage_bucket": "habitree-563a5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:33465475014:android:7633745ea8ae6d535c5cc7",
+        "android_client_info": {
+          "package_name": "com.example.habitree"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkWoplT5W9ap7bge0uFT0euGDe3y6QPOY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
