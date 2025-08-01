@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:habitree/core/routes.dart';
+import 'package:habitree/presentation/widgets/error_snackbar.dart';
 import 'package:habitree/providers/login_provider.dart';
 import 'package:habitree/presentation/widgets/auth_widgets.dart';
 import 'package:provider/provider.dart';
@@ -34,8 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final doc = await FirebaseFirestore.instance
         .collection("users")
         .doc(userId)
-        .collection("habits")
-        .doc("userHabits")
         .get();
 
     if (!mounted) return;
@@ -105,18 +104,35 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 24),
                         AuthButton(
                           text: "Sign In",
-                          onPressed: () {
-                            if (emailController.text.isEmpty ||
-                                passwordController.text.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Please fill in all fields"),
-                                  backgroundColor: Colors.red,
-                                ),
+                          onPressed: () async {
+                            final emailError = provider.validateEmail();
+                            final passwordError = provider.validatePassword();
+
+                            if (emailError != null || passwordError != null) {
+                              showCustomSnackBar(
+                                context,
+                                emailError ?? passwordError!,
                               );
+
                               return;
                             }
-                            provider.login().then((_) => checkUserFlow());
+
+                            try {
+                              final success = await provider.login();
+                              if (success) {
+                                checkUserFlow();
+                              } else {
+                                showCustomSnackBar(
+                                  context,
+                                  "Login failed. Please try again.",
+                                );
+                              }
+                            } catch (e) {
+                              showCustomSnackBar(
+                                context,
+                                e.toString().replaceFirst("Exception: ", ""),
+                              );
+                            }
                           },
                         ),
                       ],

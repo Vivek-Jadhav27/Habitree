@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:habitree/core/routes.dart';
+import 'package:habitree/presentation/widgets/error_snackbar.dart';
 import 'package:habitree/providers/signup_provider.dart';
 import 'package:habitree/presentation/widgets/auth_widgets.dart';
 import 'package:provider/provider.dart';
@@ -96,22 +97,31 @@ class _SignupScreenState extends State<SignupScreen> {
                         AuthButton(
                           text: "Sign Up",
                           onPressed: () {
-                            if (nameController.text.isEmpty ||
-                                emailController.text.isEmpty ||
-                                passwordController.text.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Please fill all fields"),
-                                  backgroundColor: Colors.red,
-                                ),
+                            final nameError = provider.validateName();
+                            final emailError = provider.validateEmail();
+                            final passwordError = provider.validatePassword();
+
+                            if (nameError != null ||
+                                emailError != null ||
+                                passwordError != null) {
+                              showCustomSnackBar(
+                                context,
+                                nameError ?? emailError ?? passwordError!,
                               );
+
                               return;
                             }
-                            provider.signUp().then((value) {
-                              if (value) {
+
+                            provider.signUp().then((success) {
+                              if (success) {
                                 Navigator.pushReplacementNamed(
                                   context,
                                   AppRoutes.login,
+                                );
+                              } else {
+                                showCustomSnackBar(
+                                  context,
+                                  "Sign Up failed",
                                 );
                               }
                             });

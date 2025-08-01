@@ -13,7 +13,6 @@ class AuthService {
     required String email,
     required String password,
   }) async {
-
     if (!RegExp(r'^(?=.*[A-Z])(?=.*\d).{8,}$').hasMatch(password)) {
       throw FirebaseAuthException(
         code: 'weak-password',
@@ -61,8 +60,21 @@ class AuthService {
         return true;
       }
       return false;
-    } on Exception catch (e) {
-      throw e;
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'invalid-email':
+          throw Exception("The email address is badly formatted.");
+        case 'user-not-found':
+          throw Exception("No user found with this email.");
+        case 'wrong-password':
+          throw Exception("Incorrect password. Try again.");
+        case 'user-disabled':
+          throw Exception("This account has been disabled.");
+        default:
+          throw Exception(e.message ?? "An unknown error occurred.");
+      }
+    } catch (e) {
+      throw Exception("Login failed. Please try again.");
     }
   }
 

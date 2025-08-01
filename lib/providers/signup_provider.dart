@@ -21,13 +21,43 @@ class SignupProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> signUp() async {
-    if((email != null) && (password != null) && (name != null)) {
-      return await AuthService.signUp(name: name!, email: email!, password: password!);
-    } else {
-      return false;
+  String? validateName() {
+    if (name == null || name!.isEmpty) {
+      return "Name is required";
     }
+    return null;
   }
 
+  String? validateEmail() {
+    if (email == null || email!.isEmpty) {
+      return "Email is required";
+    }
+    if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email!)) {
+      return "Enter a valid email address";
+    }
+    return null;
+  }
 
+  String? validatePassword() {
+    if (password == null || password!.isEmpty) {
+      return "Password is required";
+    }
+    if (!RegExp(r'^(?=.*[A-Z])(?=.*\d).{8,}$').hasMatch(password!)) {
+      return "Password must be 8+ chars, 1 uppercase & 1 number";
+    }
+    return null;
+  }
+
+  Future<bool> signUp() async {
+    if (validateName() != null ||
+        validateEmail() != null ||
+        validatePassword() != null) {
+      return false; // validation failed
+    }
+    return await AuthService.signUp(
+      name: name!,
+      email: email!,
+      password: password!,
+    );
+  }
 }
