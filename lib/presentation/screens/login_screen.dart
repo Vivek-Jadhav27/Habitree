@@ -37,8 +37,10 @@ class _LoginScreenState extends State<LoginScreen> {
         .doc(userId)
         .get();
 
+    final data = doc.data()?["habits"] as List;    
+
     if (!mounted) return;
-    if (doc.exists) {
+    if (data.isNotEmpty) {
       Navigator.pushReplacementNamed(context, AppRoutes.home);
     } else {
       Navigator.pushReplacementNamed(context, AppRoutes.habitWizard);
