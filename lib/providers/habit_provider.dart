@@ -4,7 +4,7 @@ import 'package:habitree/providers/forest_provider.dart';
 
 class HabitProvider extends ChangeNotifier {
   final FirestoreService firestoreService = FirestoreService();
-
+  final ForestProvider forestProvider = ForestProvider();
   List<String> _habits = [];
   List<bool> _completed = [];
   bool _isLoading = true;
@@ -34,9 +34,7 @@ class HabitProvider extends ChangeNotifier {
     await firestoreService.saveDailyProgress(_completed, forDate: forDate);
 
     if (_completed.every((c) => c)) {
-      ForestProvider().loadForest().then(
-        (_) => ForestProvider().growTreeWithDate(forDate ?? DateTime.now()),
-      );
+      ForestProvider().growTreeWithDate(forDate ?? DateTime.now());
     }
     notifyListeners();
   }
