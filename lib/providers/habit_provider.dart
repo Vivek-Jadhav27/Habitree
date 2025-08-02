@@ -34,7 +34,9 @@ class HabitProvider extends ChangeNotifier {
     await firestoreService.saveDailyProgress(_completed, forDate: forDate);
 
     if (_completed.every((c) => c)) {
-      ForestProvider().growTreeWithDate(forDate ?? DateTime.now());
+      forestProvider.loadForest().then(
+        (_) => forestProvider.growTreeWithDate(forDate ?? DateTime.now()),
+      );
     }
     notifyListeners();
   }
