@@ -36,6 +36,9 @@ migrate_working_dir/
 firebase.json
 /lib/presentation/screens/forest_test_screen.dart
 
+.firebaserc
+/.github/
+/.firebase/
 # Firebase config
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
