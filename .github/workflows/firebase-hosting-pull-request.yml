@@ -18,9 +18,9 @@ jobs:
       # --- Start of Flutter Web Build Steps ---
       # This section is your "build script" that prepares your Flutter app for the web.
       
-      - uses: subosito/flutter-action@v1
-        with:
-          flutter-version: '3.32.8'
+      # - uses: subosito/flutter-action@v1
+      #   with:
+      #     flutter-version: '3.32.8'
       - name: 'Run flutter pub get'
         run: flutter pub get
       - name: 'Build Web App'
