@@ -33,10 +33,8 @@ migrate_working_dir/
 .pub/
 /build/
 /lib/firebase_options.dart
-firebase.json
 /lib/presentation/screens/forest_test_screen.dart
 
-.firebaserc
 /.firebase/
 # Firebase config
 android/app/google-services.json
