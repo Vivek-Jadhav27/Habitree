@@ -5,34 +5,23 @@ name: Deploy Flutter Web to Firebase Hosting (PR)
 
 on:
   pull_request:
-    branches:
-      - main # Or 'master', depending on your default branch name
 
 jobs:
   build_and_preview:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
       # --- Start of Flutter Web Build Steps ---
       # This section is your "build script" that prepares your Flutter app for the web.
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          # IMPORTANT: Specify the Flutter version you are using.
-          # Examples: '3.19.0', '3.16.5', or 'stable' for the latest stable version.
-          flutter-version: 'stable'
-          channel: 'stable'
-
-      - name: Get Flutter dependencies
+      - uses: subosito/flutter-action@v1
+      - name: 'Run flutter pub get'
         run: flutter pub get
-
-      - name: Build Flutter Web
-        # This command creates the web-ready files in the 'build/web' directory.
-        # Use --release for an optimized production build.
-        run: flutter build web --release
-      # --- End of Flutter Web Build Steps ---
-
+      - name: 'Build Web App'
+        run: flutter build web
+  
       - name: Deploy to Firebase Hosting Preview Channel
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -42,3 +31,5 @@ jobs:
           # For pull requests, we deploy to a dynamic preview channel.
           # This creates a unique URL for each PR, perfect for testing!
           channelId: live # This dynamically generates a URL like <your-site-id>--pr-<PR_NUMBER>.web.app
+        env:
+          FIREBASE_CLI_PREVIEWS: hostingchannels
