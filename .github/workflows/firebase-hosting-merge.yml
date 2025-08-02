@@ -3,65 +3,27 @@ name: Deploy Flutter Web to Firebase Hosting (Merge)
 on:
   push:
     branches:
-      - main # Or 'master', depending on your default branch
+      - main
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      # Checkout repo
       - uses: actions/checkout@v4
-      - run: >-
-          sudo snap install flutter --classic && flutter channel beta
-      - uses: actions/setup-java@v1
+
+      # Setup Flutter (latest stable)
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
-          java-version: '12.x'
-      - uses: subosito/flutter-action@v1
-      - name: 'Run flutter pub get'
+          flutter-version: 'stable'
+
+      # Install dependencies
+      - name: Get Flutter dependencies
         run: flutter pub get
-      - name: 'Build Web App'
-        run: flutter build web
 
-      #       # Install FlutterFire CLI
-      # - name: Install FlutterFire CLI
-      #   run: |
-      #     dart pub global activate flutterfire_cli
-      #     echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
-
-      # # Restore Firebase config and generate firebase_options.dart
-      # - name: Generate firebase_options.dart
-      #   run: |
-      #     echo '${{ secrets.FIREBASE_CONFIG }}' > firebase_config.json
-      #     flutterfire configure \
-      #       --project=habitree-563a5 \
-      #       --platforms=web \
-      #       --json-file=firebase_config.json \
-      #       --out=lib/firebase_options.dart \
-      #       --yes
-
-
-      # - name: Get Flutter dependencies
-      #   run: flutter pub get
-      # # Build Flutter web app
-      # - name: Build Flutter Web
-      #   run: flutter build web --release
-        
-      # # Setup Flutter (latest stable)
-      # - name: Setup Flutter
-      #   uses: subosito/flutter-action@v2
-      #   with:
-      #     flutter-version: 'stable'
-      #     architecture: x64
-
-      #     channel: 'stable'
-
-      # # Install dependencies
-      # - name: Get Flutter dependencies
-      #   run: flutter pub get
-
-      # # Build Flutter Web (release build for production)
-      # - name: Build Flutter Web
-      #   run: flutter build web --release
+      # Build Flutter Web (release build for production)
+      - name: Build Flutter Web
+        run: flutter build web --release
 
       # Deploy to Firebase Hosting (live site)
       - name: Deploy to Firebase Hosting
