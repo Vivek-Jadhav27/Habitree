@@ -12,8 +12,25 @@ jobs:
       # Checkout repo
       - uses: actions/checkout@v4
       - run: >-
-          sudo snap install flutter --classic && flutter channel beta && flutter
-          config --enable-web && flutter build web
+          sudo snap install flutter --classic && flutter channel beta
+      - name: Install FlutterFire CLI
+        run: dart pub global activate flutterfire_cli
+      - name: Restore Firebase config
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_HABITREE_563A5 }}' > firebase_config.json
+          dart pub global run flutterfire_cli configure \
+            --project=habitree-563a5 \
+            --platforms=web \
+            --json-file=firebase_config.json \
+            --out=lib/firebase_options.dart \
+            --yes
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+      # Build Flutter web app
+      - name: Build Flutter Web
+        run: flutter build web --release
+        
       # # Setup Flutter (latest stable)
       # - name: Setup Flutter
       #   uses: subosito/flutter-action@v2
