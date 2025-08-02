@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:habitree/data/models/species_model.dart';
 
 class MockData {
-  
   static final Map<int, Species> speciesCollection = {
     1: Species(
       id: 1,
@@ -149,6 +148,56 @@ class MockData {
         },
       ],
     ),
+    4: Species(
+      id: 4,
+      name: "Baobab Tree",
+      stages: 3,
+      stageRenderParams: [
+        // Stage 1 → Thick sapling
+        {
+          'trunkColor': '#A0522D',
+          'leafColor': '#9ACD32',
+          'baseTrunkHeightFactor': 0.2,
+          'baseTrunkWidthFactor': 0.08, // Thicker trunk from early stage
+          'maxDrawingDepth': 1,
+          'branchLengthFactor': 0.4,
+          'branchWidthFactor': 0.7,
+          'branchAngleSpread': 0.6,
+          'minLeavesPerBranch': 1,
+          'maxLeavesPerBranch': 2,
+          'leafSize': 6.0, // bigger leaves
+        },
+        // Stage 2 → Expanding trunk with branches
+        {
+          'trunkColor': '#8B4513',
+          'leafColor': '#6B8E23',
+          'baseTrunkHeightFactor': 0.35,
+          'baseTrunkWidthFactor': 0.12, // much wider
+          'maxDrawingDepth': 2,
+          'branchLengthFactor': 0.5,
+          'branchWidthFactor': 0.8,
+          'branchAngleSpread': 0.9,
+          'minLeavesPerBranch': 2,
+          'maxLeavesPerBranch': 4,
+          'leafSize': 8.0,
+        },
+        // Stage 3 → Iconic bottle shape with crown leaves
+        {
+          'trunkColor': '#5C4033',
+          'leafColor': '#228B22',
+          'baseTrunkHeightFactor': 0.45,
+          'baseTrunkWidthFactor': 0.18, // very thick trunk
+          'maxDrawingDepth': 3,
+          'branchLengthFactor': 0.6,
+          'branchWidthFactor': 0.9,
+          'branchAngleSpread': 1.2,
+          'minLeavesPerBranch': 4,
+          'maxLeavesPerBranch': 7,
+          'leafSize': 10.0, // large leaves forming a crown
+        },
+      ],
+    ),
+    
   };
   static Future<void> uploadSpeciesData(
     Map<int, Species> speciesCollection,
