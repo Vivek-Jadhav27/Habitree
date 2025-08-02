@@ -9,21 +9,23 @@ jobs:
     steps:
       # Checkout repo
       - uses: actions/checkout@v4
-
-      # Setup Flutter (latest stable)
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 'stable'
-          architecture: x64
+      - run: >-
+          sudo snap install flutter --classic && flutter channel beta && flutter
+          config --enable-web && flutter build web
+      # # Setup Flutter (latest stable)
+      # - uses: subosito/flutter-action@v2
+      #   with:
+      #     flutter-version: 'stable'
+      #     architecture: x64
 
       
-      # Install dependencies
-      - name: Run flutter pub get
-        run: flutter pub get
+      # # Install dependencies
+      # - name: Run flutter pub get
+      #   run: flutter pub get
 
-      # Build Flutter web app
-      - name: Build Web App
-        run: flutter build web --release
+      # # Build Flutter web app
+      # - name: Build Web App
+      #   run: flutter build web --release
 
       # Deploy to Firebase Hosting Preview Channel
       - name: Deploy to Firebase Hosting Preview Channel
