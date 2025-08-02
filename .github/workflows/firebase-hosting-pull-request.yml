@@ -11,19 +11,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        run : sudo snap install flutter --classic && flutter channel beta
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
       # --- Start of Flutter Web Build Steps ---
       # This section is your "build script" that prepares your Flutter app for the web.
+      
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.x.x'
+          flutter-version: '3.32.8'
       - name: 'Run flutter pub get'
         run: flutter pub get
       - name: 'Build Web App'
-        run: flutter build web
-  
+        run: flutter config --enable-web && flutter build web
+
       - name: Deploy to Firebase Hosting Preview Channel
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -32,6 +34,5 @@ jobs:
           projectId: habitree-563a5
           # For pull requests, we deploy to a dynamic preview channel.
           # This creates a unique URL for each PR, perfect for testing!
-          channelId: live # This dynamically generates a URL like <your-site-id>--pr-<PR_NUMBER>.web.app
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
