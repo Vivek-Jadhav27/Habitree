@@ -1,0 +1,34 @@
+name: Deploy Flutter Web to Firebase Hosting (Merge)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Setup Flutter (latest stable)
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      # Install dependencies
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      # Build Flutter Web (release build for production)
+      - name: Build Flutter Web
+        run: flutter build web --release
+
+      # Deploy to Firebase Hosting (live site)
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_HABITREE_563A5 }}'
+          projectId: habitree-563a5
