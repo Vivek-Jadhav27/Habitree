@@ -2,21 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:habitree/core/routes.dart';
 import 'package:habitree/presentation/widgets/error_snackbar.dart';
 import 'package:habitree/providers/login_provider.dart';
 import 'package:habitree/presentation/widgets/auth_widgets.dart';
-import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool isVisible = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -49,8 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginProvider>(
-      builder: (context, provider, _) => Scaffold(
+    return Scaffold(
         backgroundColor: const Color(0xFFF9F6EF),
         body: SafeArea(
           child: Center(
@@ -85,14 +84,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           controller: emailController,
                           label: "Email",
                           keyboardType: TextInputType.emailAddress,
-                          onChanged: (v) => provider.email = v,
+                          onChanged: (v) => ref.read(myLoginProvider).email = v,
                         ),
                         const SizedBox(height: 16),
                         AuthTextField(
                           controller: passwordController,
                           label: "Password",
                           obscureText: !isVisible,
-                          onChanged: (v) => provider.password = v,
+                          onChanged: (v) => ref.read(myLoginProvider).password = v,
                           suffixIcon: GestureDetector(
                             onTap: togglePassword,
                             child: Icon(
@@ -107,8 +106,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         AuthButton(
                           text: "Sign In",
                           onPressed: () async {
-                            final emailError = provider.validateEmail();
-                            final passwordError = provider.validatePassword();
+                            final emailError = ref.read(myLoginProvider).validateEmail();
+                            final passwordError = ref.read(myLoginProvider).validatePassword();
 
                             if (emailError != null || passwordError != null) {
                               showCustomSnackBar(
@@ -120,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
 
                             try {
-                              final success = await provider.login();
+                              final success = await ref.read(myLoginProvider).login();
                               if (success) {
                                 checkUserFlow();
                               } else {
@@ -170,7 +169,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
