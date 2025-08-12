@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:habitree/presentation/screens/species_gallery_screen.dart';
 import 'package:habitree/providers/forest_provider.dart';
 import 'package:habitree/providers/habit_provider.dart';
-import 'package:habitree/providers/login_provider.dart';
 import 'package:habitree/providers/signup_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +35,5 @@ class AppRoutes {
     ChangeNotifierProvider(create: (_) => ForestProvider()..loadForest()),
     ChangeNotifierProvider(create: (_) => HabitProvider()..loadHabits()),
     ChangeNotifierProvider(create: (_) => SignupProvider()),
-    ChangeNotifierProvider(create: (_) => LoginProvider()),
   ];
 }
